@@ -2,19 +2,47 @@
   "name": "css-class-name-completion",
   "displayName": "CSS Class Name Completion",
   "description": "Provides CSS class autocompletion for HTML files.",
-  "publisher": "Lukas Korten",
+  "publisher": "lukas-korten",
+  "author": {
+    "name": "Lukas Korten",
+    "url": "https://lukas-korten.de"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lukaskorten/css-class-name-completion.git"
+  },
+  "bugs": "https://github.com/lukaskorten/css-class-name-completion/issues",
+  "homepage": "https://github.com/lukaskorten/css-class-name-completion",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.95.0"
   },
   "categories": [
-    "Other"
+    "Programming Languages"
+  ],
+  "keywords": [
+    "css",
+    "html",
+    "javascript",
+    "typescript",
+    "angular"
   ],
   "activationEvents": [
     "onLanguage:html"
   ],
   "main": "./dist/extension.js",
   "contributes": {
+    "configuration": {
+      "title": "CSS Class Name Completion Settings",
+      "properties": {
+        "cssClassNames.remote": {
+          "type": "array",
+          "scope": "application",
+          "description": "List of remote stylesheet URLs for which suggestions are requested.",
+          "default": []
+        }
+      }
+    },
     "commands": []
   },
   "scripts": {
