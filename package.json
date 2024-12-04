@@ -38,7 +38,7 @@
       "properties": {
         "cssClassNames.remote": {
           "type": "array",
-          "scope": "application",
+          "scope": "resource",
           "description": "List of remote stylesheet URLs for which suggestions are requested.",
           "default": []
         }
