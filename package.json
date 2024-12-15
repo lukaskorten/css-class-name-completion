@@ -13,7 +13,7 @@
   },
   "bugs": "https://github.com/lukaskorten/css-class-name-completion/issues",
   "homepage": "https://github.com/lukaskorten/css-class-name-completion",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
   "engines": {
     "vscode": "^1.95.0"
@@ -23,15 +23,22 @@
   ],
   "keywords": [
     "css",
+    "stylesheet",
     "html",
-    "javascript",
-    "typescript",
-    "angular"
+    "Code Assistance",
+    "Class Name Suggestions",
+    "CSS Class Names",
+    "CSS Class Name Completion",
+    "CSS Class Name Autocompletion",
+    "CSS Class Name Suggestions",
+    "CSS Class Name IntelliSense",
+    "HTML Integration"
   ],
   "activationEvents": [
     "onLanguage:html"
   ],
   "main": "./dist/extension.js",
+  "icon": "icon.png",
   "contributes": {
     "configuration": {
       "title": "CSS Class Name Completion Settings",
