@@ -13,7 +13,7 @@
   },
   "bugs": "https://github.com/lukaskorten/css-class-name-completion/issues",
   "homepage": "https://github.com/lukaskorten/css-class-name-completion",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "license": "MIT",
   "engines": {
     "vscode": "^1.95.0"
