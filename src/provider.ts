@@ -22,7 +22,7 @@ function isClassAttribute(document: TextDocument, position: Position): boolean {
 }
 
 export class CssClassProvider implements CompletionItemProvider {
-  public async getClassNamesFromRemoteStyleSheets(): Promise<string[]> {
+  public async getClassNames(): Promise<string[]> {
     const urls = getRemoteStyleSheetsURLs();
     if (urls.length === 0) {
       return [];
@@ -57,7 +57,7 @@ export class CssClassProvider implements CompletionItemProvider {
       return;
     }
 
-    const classNames = await this.getClassNamesFromRemoteStyleSheets();
+    const classNames = await this.getClassNames();
     return classNames.map((className) => {
       const item = new CompletionItem(className, CompletionItemKind.Class);
       item.detail = 'CSS-Class';
