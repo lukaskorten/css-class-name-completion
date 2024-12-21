@@ -13,9 +13,7 @@ export function activate(context: ExtensionContext) {
 
   const disposable = commands.registerCommand(
     'css-class-autocomplete.updateCssClasses',
-    () => {
-      return provider.getClassNames();
-    }
+    () => provider.getClassNames()
   );
 
   context.subscriptions.push(disposable);
