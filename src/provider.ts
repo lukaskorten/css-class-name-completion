@@ -6,7 +6,7 @@ import {
   Position,
   TextDocument,
 } from 'vscode';
-import { loadOrDownloadClassNames } from './download';
+import { loadClassNames } from './download-styles';
 
 export class CssClassProvider implements CompletionItemProvider {
   private cachedClassNames: string[] | undefined = undefined;
@@ -46,7 +46,7 @@ export class CssClassProvider implements CompletionItemProvider {
   public async getClassNames(): Promise<string[]> {
     if (this.cachedClassNames) return this.cachedClassNames;
 
-    const classNamesByUrl = await loadOrDownloadClassNames();
+    const classNamesByUrl = await loadClassNames();
     this.cachedClassNames = Object.values(classNamesByUrl).flat();
     return this.cachedClassNames;
   }

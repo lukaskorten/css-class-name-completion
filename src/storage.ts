@@ -8,7 +8,7 @@ const storageFilePath = Uri.file(
   `${workspaceFolderPath}/.vscode/css-classes.json`
 );
 
-export function readStorageFile(): Record<string, string[]> {
+export function readStoredClassNames(): Record<string, string[]> {
   if (!fs.existsSync(storageFilePath.fsPath)) {
     fs.writeFileSync(storageFilePath.fsPath, JSON.stringify({}), ENCODING);
     return {};
@@ -18,7 +18,7 @@ export function readStorageFile(): Record<string, string[]> {
   return JSON.parse(fileContent.toString());
 }
 
-export function writeStorageFile(cssClassNamesMap: Record<string, string[]>) {
+export function storeClassNames(cssClassNamesMap: Record<string, string[]>) {
   fs.writeFileSync(
     storageFilePath.fsPath,
     JSON.stringify(cssClassNamesMap),

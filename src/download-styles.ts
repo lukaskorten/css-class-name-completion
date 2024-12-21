@@ -2,7 +2,7 @@ import axios from 'axios';
 import { window } from 'vscode';
 import { extractClassNames } from './extract-class-names';
 import { getRemoteStyleSheetsURLs } from './settings';
-import { readStorageFile, writeStorageFile } from './storage';
+import { readStoredClassNames, storeClassNames } from './storage';
 
 async function downloadStyles(url: string): Promise<string> {
   try {
@@ -16,21 +16,19 @@ async function downloadStyles(url: string): Promise<string> {
   }
 }
 
-export async function loadOrDownloadClassNames(): Promise<
-  Record<string, string[]>
-> {
+export async function loadClassNames(): Promise<Record<string, string[]>> {
   const urls = getRemoteStyleSheetsURLs();
   if (!urls.length) return {};
 
-  const storage = readStorageFile();
+  const storedClassNames = readStoredClassNames();
 
   const classNamesByUrl = (
     await Promise.all(
       urls.map(async (url) => {
         let classNames: string[];
 
-        if (storage[url]) {
-          classNames = storage[url];
+        if (storedClassNames[url]) {
+          classNames = storedClassNames[url];
         } else {
           const styles = await downloadStyles(url);
           classNames = extractClassNames(styles);
@@ -41,7 +39,7 @@ export async function loadOrDownloadClassNames(): Promise<
     )
   ).reduce((previous, current) => ({ ...previous, ...current }), {});
 
-  writeStorageFile(classNamesByUrl);
+  storeClassNames(classNamesByUrl);
 
   return classNamesByUrl;
 }
