@@ -50,7 +50,13 @@
           "default": []
         }
       }
-    }
+    },
+    "commands": [
+      {
+        "command": "cssClassNames.updateCssClasses",
+        "title": "CSS Classes: Clear the cache and update"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run package",

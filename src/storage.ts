@@ -10,7 +10,7 @@ const storageFilePath = Uri.file(
 
 export function readStoredClassNames(): Record<string, string[]> {
   if (!fs.existsSync(storageFilePath.fsPath)) {
-    fs.writeFileSync(storageFilePath.fsPath, JSON.stringify({}), ENCODING);
+    writeNewStorageFile();
     return {};
   }
 
@@ -24,4 +24,12 @@ export function storeClassNames(cssClassNamesMap: Record<string, string[]>) {
     JSON.stringify(cssClassNamesMap),
     ENCODING
   );
+}
+
+export function clearStorage() {
+  writeNewStorageFile();
+}
+
+function writeNewStorageFile() {
+  fs.writeFileSync(storageFilePath.fsPath, JSON.stringify({}), ENCODING);
 }

@@ -7,6 +7,7 @@ import {
   TextDocument,
 } from 'vscode';
 import { loadClassNames } from './download-styles';
+import { clearStorage } from './storage';
 
 export class CssClassProvider implements CompletionItemProvider {
   private cachedClassNames: string[] | undefined = undefined;
@@ -43,11 +44,15 @@ export class CssClassProvider implements CompletionItemProvider {
     return /class\s*=\s*["'][^"']*$/.test(textBeforeCursor);
   }
 
-  public async getClassNames(): Promise<string[]> {
+  private async getClassNames(): Promise<string[]> {
     if (this.cachedClassNames) return this.cachedClassNames;
-
-    const classNamesByUrl = await loadClassNames();
-    this.cachedClassNames = Object.values(classNamesByUrl).flat();
+    this.cachedClassNames = await loadClassNames();
     return this.cachedClassNames;
+  }
+
+  public async updateClassNames() {
+    this.cachedClassNames = undefined;
+    clearStorage();
+    this.cachedClassNames = await loadClassNames();
   }
 }

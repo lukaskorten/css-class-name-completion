@@ -16,30 +16,29 @@ async function downloadStyles(url: string): Promise<string> {
   }
 }
 
-export async function loadClassNames(): Promise<Record<string, string[]>> {
+export async function loadClassNames(): Promise<string[]> {
   const urls = getRemoteStyleSheetsURLs();
-  if (!urls.length) return {};
+  if (!urls.length) return [];
 
   const storedClassNames = readStoredClassNames();
 
-  const classNamesByUrl = (
-    await Promise.all(
-      urls.map(async (url) => {
-        let classNames: string[];
+  const allClassNames = await Promise.all(
+    urls.map(async (url) => {
+      let classNames: string[];
 
-        if (storedClassNames[url]) {
-          classNames = storedClassNames[url];
-        } else {
-          const styles = await downloadStyles(url);
-          classNames = extractClassNames(styles);
-        }
+      if (storedClassNames[url]) {
+        classNames = storedClassNames[url];
+      } else {
+        const styles = await downloadStyles(url);
+        classNames = extractClassNames(styles);
+        storedClassNames[url] = classNames;
+      }
 
-        return { [url]: classNames };
-      })
-    )
-  ).reduce((previous, current) => ({ ...previous, ...current }), {});
+      return classNames;
+    })
+  );
 
-  storeClassNames(classNamesByUrl);
+  storeClassNames(storedClassNames);
 
-  return classNamesByUrl;
+  return allClassNames.flat();
 }
