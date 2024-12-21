@@ -29,19 +29,19 @@ export class CssClassProvider implements CompletionItemProvider {
     }
 
     return (
-      await Promise.all(
-        urls.map(async (url) => {
-          if (cachedClassNames.has(url)) {
-            return cachedClassNames.get(url) ?? [];
-          }
-
-          const styles = await downloadStyles(url);
-          const extracted = extractClassNames(styles);
-          cachedClassNames.set(url, extracted);
-          return extracted;
-        })
-      )
+      await Promise.all(urls.map(async (url) => this.getClassNamesByUrl(url)))
     ).flat();
+  }
+
+  private async getClassNamesByUrl(url: string): Promise<string[]> {
+    if (cachedClassNames.has(url)) {
+      return cachedClassNames.get(url) ?? [];
+    }
+
+    const styles = await downloadStyles(url);
+    const extracted = extractClassNames(styles);
+    cachedClassNames.set(url, extracted);
+    return extracted;
   }
 
   public async provideCompletionItems(
