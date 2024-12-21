@@ -1,57 +1,23 @@
 import {
   CancellationToken,
-  CompletionContext,
   CompletionItem,
   CompletionItemKind,
   CompletionItemProvider,
   Position,
   TextDocument,
 } from 'vscode';
-import { downloadStyles } from './download';
-import { extractClassNames } from './extract-class-names';
-import { getRemoteStyleSheetsURLs } from './settings';
-
-const cachedClassNames = new Map<string, string[]>();
-
-function isClassAttribute(document: TextDocument, position: Position): boolean {
-  const lineText = document.lineAt(position).text;
-  const cursorIndex = position.character;
-  const textBeforeCursor = lineText.substring(0, cursorIndex);
-
-  return /class\s*=\s*["'][^"']*$/.test(textBeforeCursor);
-}
+import { loadOrDownloadClassNames } from './download';
 
 export class CssClassProvider implements CompletionItemProvider {
-  public async getClassNames(): Promise<string[]> {
-    const urls = getRemoteStyleSheetsURLs();
-    if (urls.length === 0) {
-      return [];
-    }
-
-    return (
-      await Promise.all(urls.map(async (url) => this.getClassNamesByUrl(url)))
-    ).flat();
-  }
-
-  private async getClassNamesByUrl(url: string): Promise<string[]> {
-    if (cachedClassNames.has(url)) {
-      return cachedClassNames.get(url) ?? [];
-    }
-
-    const styles = await downloadStyles(url);
-    const extracted = extractClassNames(styles);
-    cachedClassNames.set(url, extracted);
-    return extracted;
-  }
+  private cachedClassNames: string[] | undefined = undefined;
 
   public async provideCompletionItems(
     document: TextDocument,
     position: Position,
-    token: CancellationToken,
-    context: CompletionContext
+    token: CancellationToken
   ) {
     if (
-      !isClassAttribute(document, position) ||
+      !this.isClassAttribute(document, position) ||
       token.isCancellationRequested
     ) {
       return;
@@ -64,5 +30,24 @@ export class CssClassProvider implements CompletionItemProvider {
       item.commitCharacters = [' '];
       return item;
     });
+  }
+
+  private isClassAttribute(
+    document: TextDocument,
+    position: Position
+  ): boolean {
+    const lineText = document.lineAt(position).text;
+    const cursorIndex = position.character;
+    const textBeforeCursor = lineText.substring(0, cursorIndex);
+
+    return /class\s*=\s*["'][^"']*$/.test(textBeforeCursor);
+  }
+
+  public async getClassNames(): Promise<string[]> {
+    if (this.cachedClassNames) return this.cachedClassNames;
+
+    const classNamesByUrl = await loadOrDownloadClassNames();
+    this.cachedClassNames = Object.values(classNamesByUrl).flat();
+    return this.cachedClassNames;
   }
 }

@@ -4,7 +4,7 @@ import { extractClassNames } from './extract-class-names';
 import { getRemoteStyleSheetsURLs } from './settings';
 import { readStorageFile, writeStorageFile } from './storage';
 
-export async function downloadStyles(url: string): Promise<string> {
+async function downloadStyles(url: string): Promise<string> {
   try {
     const response = await axios.get(url);
     return response.data;
