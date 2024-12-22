@@ -12,10 +12,8 @@ export function activate(context: ExtensionContext) {
   );
 
   const disposable = commands.registerCommand(
-    'css-class-autocomplete.updateCssClasses',
-    () => {
-      return provider.getClassNamesFromRemoteStyleSheets();
-    }
+    'cssClassNames.updateCssClasses',
+    () => provider.updateClassNames()
   );
 
   context.subscriptions.push(disposable);
