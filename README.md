@@ -22,3 +22,9 @@ Example:
   ]
 }
 ```
+
+## Commands
+
+### CSS Class Names: Update
+
+Clears the cache of the downloaded and extracted class names and triggers the download again.
